@@ -1,14 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Navbar from "./components/Navbar"
+import Loginpage from "./components/Loginpage"
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div>
-      HELLO FRONTEND
+      <Router>
+        <Navbar /> {/* Navbar visas på alla sidor */}
+        <Routes>
+          <Route path="/login" element={<Loginpage />} /> 
+        </Routes>
+      </Router>
     </div>
   )
 }
