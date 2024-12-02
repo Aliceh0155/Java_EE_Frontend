@@ -1,7 +1,5 @@
 "use client"
-
 import { ChangeEvent, FormEvent, useState } from "react"
-
 export interface IUser {
   username: string
   password: string
@@ -9,33 +7,27 @@ export interface IUser {
 
 const LoginUser = () => {
   const [user, setUser] = useState<IUser>({ username: "", password: "" })
-
   // Handle changes in input fields (username, password)
   const handleUserChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
     setUser((prevData) => ({ ...prevData, [name]: value }))
   }
-
   // Handle form submission
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault()
-
     // Credential Validation
     if (!user.username || !user.password) {
       return
     }
-
     try {
       // Create the body to send in the POST request
       const createUrlEncodedBody = new URLSearchParams({
         username: user.username,
         password: user.password,
       })
-
       // Timeout Setup
       const controller = new AbortController()
       const signal = controller.signal
-
       // Post
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
@@ -47,9 +39,7 @@ const LoginUser = () => {
           "Content-Type": "application/json",
         },
       })
-
       console.log(response)
-
       // Bad Credentials
       if ((await response.status) == 401) {
         return
@@ -57,18 +47,15 @@ const LoginUser = () => {
       if (response.status === 401) {
         alert("Invalid credentials. Please try again.")
       }
-
       // SUCCESS
       const data = await response.text() // Get the token from the response
       console.log("Login successful:", data)
-
       // Spara token i localStorage eller sessionStorage
       localStorage.setItem("jwtToken", data)
     } catch (error) {
       console.error("Error occurred during login:", error)
     }
   }
-
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
@@ -113,5 +100,3 @@ const LoginUser = () => {
     </div>
   )
   }  
-
-export default LoginUser

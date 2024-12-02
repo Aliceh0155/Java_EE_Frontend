@@ -37,7 +37,14 @@ const RegisterUser = () => {
     }
   };
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
+    <div
+      className="h-screen flex items-center justify-center bg-gray-100"
+      style={{
+        backgroundImage: 'url("/src/assets/images/wp8151821-harry-potter-aesthetic-pc-wallpapers.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
         <h2 className="text-2xl font-bold text-center mb-6">Register User</h2>
         <form onSubmit={handleSubmit} className="space-y-4">

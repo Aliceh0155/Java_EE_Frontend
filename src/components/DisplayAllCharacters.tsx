@@ -1,31 +1,7 @@
 import axios from "axios"
-import React, { useEffect, useState } from "react"
-
-// Wand interface
-interface Wand {
-  wood: string
-  core: string
-  length: number
-}
-
-// CharacterModel interface
-interface CharacterModel {
-  id: string
-  name: string
-  species: string
-  gender: string
-  house: string
-  dateOfBirth: string
-  yearOfBirth: number
-  wizard: boolean
-  ancestry: string
-  eyeColour: string
-  hairColour: string
-  wand: Wand
-  hogwartsStudent: boolean
-  alive: boolean
-  image: string
-}
+import { useEffect, useState } from "react"
+import {CharacterModel} from '../interfaces/CharacterModel'
+import { Link } from "react-router-dom"
 
 const DisplayAllCharacters = () => {
   const [characters, setCharacters] = useState<CharacterModel[]>([])
@@ -48,23 +24,36 @@ const DisplayAllCharacters = () => {
     "https://images.desenio.com/zoom/wb0012-8harrypotter-hogwartscrest50x70-60944-71911.jpg"
 
   return (
-    <div>
-    <h1>All Characters</h1>
-    <div className="flex flex-wrap justify-center gap-8">
-      {characters.map((character) => (
-        <div key={character.id} className="w-1/6 p-4 text-center">
-          <div className="flex-shrink-0 relative" style={{ height: '240px' }}>
-            <img
-              src={character.image ? character.image : defaultImage}
-              alt={character.name}
-              className="w-full h-full object-fit rounded"
-            />
+    <div className="relative">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: 'url("/src/assets/images/wp8151821-harry-potter-aesthetic-pc-wallpapers.jpg")',
+          backgroundAttachment: 'fixed',
+          zIndex: -1,
+        }}
+      />
+      <div className="flex flex-wrap justify-center gap-8">
+        {characters.map((character) => (
+          <div key={character.id} className="w-1/6 p-4 text-center">
+            <div className="flex-shrink-0 relative" style={{ height: '240px' }}>
+              {/* Lägg till Link runt bilden */}
+              <Link to={`/characters/character/${character.id}`}>
+                <img
+                  src={character.image ? character.image : defaultImage}
+                  alt={character.name}
+                  className="w-full h-full object-fit rounded"
+                />
+              </Link>
+            </div>
+            {/* Lägg till Link runt namnet */}
+            <Link to={`/characters/character/${character.id}`}>
+              <p className="mt-2 text-sm font-medium text-white">{character.name}</p>
+            </Link>
           </div>
-          <p className="mt-2 text-sm font-medium">{character.name}</p>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
   )
 }
 
