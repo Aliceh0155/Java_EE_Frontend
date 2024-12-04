@@ -27,15 +27,6 @@ const DisplayAllCharacters = () => {
 
   return (
     <div className="relative">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            'url("/src/assets/images/wp8151821-harry-potter-aesthetic-pc-wallpapers.jpg")',
-          backgroundAttachment: "fixed",
-          zIndex: -1,
-        }}
-      />
       <div className="flex flex-wrap justify-center gap-8">
         {characters.map((character) => (
           <div key={character.apiId} className="w-1/6 p-4 text-center">
