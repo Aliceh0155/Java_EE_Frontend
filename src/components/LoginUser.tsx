@@ -27,9 +27,6 @@ const LoginUser = () => {
         username: user.username,
         password: user.password,
       })
-      // Timeout Setup
-      const controller = new AbortController()
-      const signal = controller.signal
 
       // Post
       const response = await fetch("http://localhost:8080/login", {
@@ -42,36 +39,37 @@ const LoginUser = () => {
           "Content-Type": "application/json", // Skickar JSON
         },
       })
-
       console.log(response)
 
-      // Bad Credentials
-      if ((await response.status) == 401) {
-        return
-      }
-      if (response.status === 401) {
+      if (response.status === 401 || response.status === 403) {
         alert("Invalid credentials. Please try again.")
       }
 
       // SUCCESS
+      if (response.status === 200) {
       const data = await response.text() // Get the token from the response
       console.log("Login successful:", data)
-      // Spara token i localStorage eller sessionStorage
+      // Spara token
       localStorage.setItem("jwtToken", data)
-      // Omdirigera användaren till startsidan
       navigate("/")
+    }
     } catch (error) {
       console.error("Error occurred during login:", error)
     }
   }
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
+    <div
+      className="h-screen flex items-center justify-center bg-gray-100"
+      style={{
+        backgroundImage:
+          'url("/src/assets/images/wp8151821-harry-potter-aesthetic-pc-wallpapers.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
-        <header className="text-2xl font-bold text-center mb-6">
-          Please Login
-        </header>
+        <h2 className="text-2xl font-bold text-center mb-6">Login User</h2>
         <form onSubmit={onSubmit} className="space-y-4">
-          {/* Username */}
           <div>
             <label
               htmlFor="username"
@@ -88,8 +86,6 @@ const LoginUser = () => {
               required
             />
           </div>
-
-          {/* Password */}
           <div>
             <label
               htmlFor="password"
@@ -112,7 +108,7 @@ const LoginUser = () => {
             className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition"
           >
             Login
-          </button>
+            </button>
         </form>
       </div>
     </div>

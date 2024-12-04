@@ -7,8 +7,8 @@ interface WandModel {
 }
 
 export interface CharacterModel {
-  _id: string // MongoDB:s unika id
-  apiId: string // ID från API:et
+  _id: string 
+  apiId: string 
   name: string
   species: string
   gender: string

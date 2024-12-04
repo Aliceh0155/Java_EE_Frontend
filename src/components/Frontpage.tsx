@@ -1,4 +1,4 @@
-import React from "react";
+
 import DisplayAllCharacters from "./DisplayAllCharacters";
 import GetFavourites from "./GetFavourites";
 
@@ -15,7 +15,7 @@ const Frontpage = () => {
         }}
       />
       <div className="relative z-10">
-        <section className="py-10">
+      <section className="py-10">
           <GetFavourites />
         </section>
         <section className="py-10">

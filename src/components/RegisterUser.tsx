@@ -1,16 +1,16 @@
 import { useState, FormEvent } from "react"
+import { useNavigate } from "react-router-dom"
 
 const RegisterUser = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [message, setMessage] = useState("")
+  const navigate = useNavigate()
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
 
     if (!username || !password) {
-      setMessage("Username and password are required.")
-      return
+      return "Username and password are required."
     }
 
     try {
@@ -26,13 +26,15 @@ const RegisterUser = () => {
       })
 
       if (response.ok) {
-        setMessage("User registered successfully!")
+        console.log ("User registered successfully!")
+        alert("User registered successfully!")
+        navigate("/login")
       } else {
         const errorData = await response.text()
-        setMessage(`Error: ${errorData}`)
+        console.log ("Error: ${errorData}")
       }
     } catch (error) {
-      setMessage("An error occurred while registering.")
+      console.log ("An error occurred while registering.")
       console.error(error)
     }
   }
@@ -80,9 +82,6 @@ const RegisterUser = () => {
             Register
           </button>
         </form>
-        {message && (
-          <p className="text-center text-green-600 mt-4">{message}</p>
-        )}
       </div>
     </div>
   )
