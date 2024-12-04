@@ -1,5 +1,6 @@
 "use client"
 import { ChangeEvent, FormEvent, useState } from "react"
+import { useNavigate } from "react-router-dom"
 export interface IUser {
   username: string
   password: string
@@ -7,6 +8,7 @@ export interface IUser {
 
 const LoginUser = () => {
   const [user, setUser] = useState<IUser>({ username: "", password: "" })
+  const navigate = useNavigate()
   // Handle changes in input fields (username, password)
   const handleUserChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -28,6 +30,7 @@ const LoginUser = () => {
       // Timeout Setup
       const controller = new AbortController()
       const signal = controller.signal
+
       // Post
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
@@ -36,10 +39,12 @@ const LoginUser = () => {
           password: user.password,
         }),
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // Skickar JSON
         },
       })
+
       console.log(response)
+
       // Bad Credentials
       if ((await response.status) == 401) {
         return
@@ -47,11 +52,14 @@ const LoginUser = () => {
       if (response.status === 401) {
         alert("Invalid credentials. Please try again.")
       }
+
       // SUCCESS
       const data = await response.text() // Get the token from the response
       console.log("Login successful:", data)
       // Spara token i localStorage eller sessionStorage
       localStorage.setItem("jwtToken", data)
+      // Omdirigera användaren till startsidan
+      navigate("/")
     } catch (error) {
       console.error("Error occurred during login:", error)
     }
@@ -59,11 +67,18 @@ const LoginUser = () => {
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
-        <header className="text-2xl font-bold text-center mb-6">Please Login</header>
+        <header className="text-2xl font-bold text-center mb-6">
+          Please Login
+        </header>
         <form onSubmit={onSubmit} className="space-y-4">
           {/* Username */}
           <div>
-            <label htmlFor="username" className="block text-gray-700 font-medium mb-2">Username</label>
+            <label
+              htmlFor="username"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              Username
+            </label>
             <input
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               type="text"
@@ -73,10 +88,13 @@ const LoginUser = () => {
               required
             />
           </div>
-  
+
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 font-medium mb-2"
+            >
               Password
             </label>
             <input
@@ -88,7 +106,7 @@ const LoginUser = () => {
               required
             />
           </div>
-  
+
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition"
@@ -99,4 +117,6 @@ const LoginUser = () => {
       </div>
     </div>
   )
-  }  
+}
+
+export default LoginUser

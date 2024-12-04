@@ -11,10 +11,13 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-        <Route path="/" element={<Frontpage/>} />
-          <Route path="/login" element={<LoginUser/>} />
-          <Route path="/register" element={<RegisterUser/>} />
-          <Route path="/characters/character/:id" element={<GetOneCharacter/>} />
+          <Route path="/" element={<Frontpage />} />
+          <Route path="/login" element={<LoginUser />} />
+          <Route path="/register" element={<RegisterUser />} />
+          <Route
+            path="/characters/character/:id"
+            element={<GetOneCharacter />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

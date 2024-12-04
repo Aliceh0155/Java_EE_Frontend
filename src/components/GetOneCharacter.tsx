@@ -2,56 +2,70 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { CharacterModel } from "../interfaces/CharacterModel"
 import { useNavigate, useParams } from "react-router-dom"
+import backgroundImage from "../assets/images/wp8151821-harry-potter-aesthetic-pc-wallpapers.jpg"
+import AddToFavourites from "./AddToFavourites"
 
 const GetOneCharacter = () => {
   const [character, setCharacter] = useState<CharacterModel | null>(null)
-  const { id } = useParams<{ id: string }>() 
-  const navigate = useNavigate()  // Använd navigate för att omdirigera
-  const token = localStorage.getItem("jwtToken")  // Kolla om token finns i localStorage
+  const { id } = useParams<{ id?: string }>()
+  const navigate = useNavigate()
+  const token = localStorage.getItem("jwtToken")
 
-  // Om användaren inte är inloggad, omdirigera till login-sidan
   useEffect(() => {
     if (!token) {
-      navigate("/login")  // Om token inte finns, skicka till login
+      navigate("/login")
     }
   }, [token, navigate])
 
-  
-  const fetchCharacter = async () => {
+  const fetchCharacter = async (characterId: string) => {
     try {
+      const token = localStorage.getItem("jwtToken")
       const response = await axios.get(
-        `http://localhost:8080/character/${id}`
+        `http://localhost:8080/character/${characterId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
-      console.log(response.data)
       setCharacter(response.data)
+      console.log(response.data)
     } catch (error) {
-      console.error("Error Fetching: ", error)
+      if (axios.isAxiosError(error) && error.response?.status === 403) {
+        alert("Session expired. Please log in again.")
+        navigate("/login")
+      } else {
+        console.error("Error Fetching: ", error)
+      }
     }
   }
 
   useEffect(() => {
     if (id && token) {
-      fetchCharacter()
+      fetchCharacter(id)
     }
   }, [id, token])
+
   const defaultImage =
     "https://images.desenio.com/zoom/wb0012-8harrypotter-hogwartscrest50x70-60944-71911.jpg"
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div
+      className="flex justify-center items-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       {character ? (
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg">
-          <h1 className="text-3xl font-bold text-center mb-4">
-            {character.name}
-          </h1>
-          <div className="flex justify-center">
+        <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-lg flex max-w-4xl w-full">
+          <div className="p-10 flex-shrink-0">
             <img
               src={character.image ? character.image : defaultImage}
               alt={character.name}
-              className="w-48 h-48 object-cover rounded"
+              className="w-64 h-74 object-cover rounded"
             />
           </div>
-          <div className="mt-4 text-left space-y-2">
+
+          <div className="ml-40 flex flex-col justify-center space-y-4">
+            <h1 className="text-4xl font-bold">{character.name}</h1>
             <p>
               <strong>Species:</strong> {character.species}
             </p>
@@ -60,9 +74,6 @@ const GetOneCharacter = () => {
             </p>
             <p>
               <strong>House:</strong> {character.house}
-            </p>
-            <p>
-              <strong>Date of Birth:</strong> {character.dateOfBirth}
             </p>
             <p>
               <strong>Year of Birth:</strong> {character.yearOfBirth}
@@ -86,24 +97,25 @@ const GetOneCharacter = () => {
             <p>
               <strong>Alive:</strong> {character.alive ? "Yes" : "No"}
             </p>
-            <p>
+            <div>
               <strong>Wand:</strong>
-            </p>
-            <ul className="list-disc ml-4">
-              <li>
-                <strong>Wood:</strong> {character.wand.wood}
-              </li>
-              <li>
-                <strong>Core:</strong> {character.wand.core}
-              </li>
-              <li>
-                <strong>Length:</strong> {character.wand.length} inches
-              </li>
-            </ul>
+              <ul className="list-disc ml-4">
+                <li>
+                  <strong>Wood:</strong> {character.wand.wood}
+                </li>
+                <li>
+                  <strong>Core:</strong> {character.wand.core}
+                </li>
+                <li>
+                  <strong>Length:</strong> {character.wand.length} inches
+                </li>
+              </ul>
+            </div>
+            {id && <AddToFavourites characterId={id} />}
           </div>
         </div>
       ) : (
-        <p>Loading character...</p>
+        <p className="text-white text-2xl">Loading character...</p>
       )}
     </div>
   )
