@@ -27,7 +27,7 @@ const LoginUser = () => {
         username: user.username,
         password: user.password,
       })
-
+      
       // Post
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
@@ -36,7 +36,7 @@ const LoginUser = () => {
           password: user.password,
         }),
         headers: {
-          "Content-Type": "application/json", // Skickar JSON
+          "Content-Type": "application/json",
         },
       })
       console.log(response)
@@ -57,6 +57,7 @@ const LoginUser = () => {
       console.error("Error occurred during login:", error)
     }
   }
+  
   return (
     <div
       className="h-screen flex items-center justify-center bg-gray-100"

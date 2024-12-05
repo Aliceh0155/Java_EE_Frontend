@@ -31,7 +31,9 @@ const RegisterUser = () => {
         navigate("/login")
       } else {
         const errorData = await response.text()
-        console.log ("Error: ${errorData}")
+        alert(errorData)
+        throw new Error(errorData); 
+        
       }
     } catch (error) {
       console.log ("An error occurred while registering.")
