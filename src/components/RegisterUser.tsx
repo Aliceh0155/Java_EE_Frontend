@@ -26,17 +26,16 @@ const RegisterUser = () => {
       })
 
       if (response.ok) {
-        console.log ("User registered successfully!")
+        console.log("User registered successfully!")
         alert("User registered successfully!")
         navigate("/login")
       } else {
         const errorData = await response.text()
         alert(errorData)
-        throw new Error(errorData); 
-        
+        throw new Error(errorData)
       }
     } catch (error) {
-      console.log ("An error occurred while registering.")
+      console.log("An error occurred while registering.")
       console.error(error)
     }
   }

@@ -1,8 +1,20 @@
-
-import DisplayAllCharacters from "./DisplayAllCharacters";
-import GetFavourites from "./GetFavourites";
+import { useEffect, useState } from "react"
+import DisplayAllCharacters from "./DisplayAllCharacters"
+import GetFavourites from "./GetFavourites"
 
 const Frontpage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken")
+
+    if (token) {
+      setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
+    }
+  }, [])
+
   return (
     <div className="relative">
       <div
@@ -15,15 +27,17 @@ const Frontpage = () => {
         }}
       />
       <div className="relative z-10">
-      <section className="py-10">
-          <GetFavourites />
-        </section>
+        {isLoggedIn && (
+          <section className="py-10">
+            <GetFavourites />
+          </section>
+        )}
         <section className="py-10">
           <DisplayAllCharacters />
         </section>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Frontpage;
+export default Frontpage

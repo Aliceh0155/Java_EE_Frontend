@@ -9,15 +9,13 @@ export interface IUser {
 const LoginUser = () => {
   const [user, setUser] = useState<IUser>({ username: "", password: "" })
   const navigate = useNavigate()
-  // Handle changes in input fields (username, password)
+
   const handleUserChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
     setUser((prevData) => ({ ...prevData, [name]: value }))
   }
-  // Handle form submission
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    // Credential Validation
     if (!user.username || !user.password) {
       return
     }
@@ -27,8 +25,7 @@ const LoginUser = () => {
         username: user.username,
         password: user.password,
       })
-      
-      // Post
+
       const response = await fetch("http://localhost:8080/login", {
         method: "POST",
         body: JSON.stringify({
@@ -45,19 +42,18 @@ const LoginUser = () => {
         alert("Invalid credentials. Please try again.")
       }
 
-      // SUCCESS
       if (response.status === 200) {
-      const data = await response.text() // Get the token from the response
-      console.log("Login successful:", data)
-      // Spara token
-      localStorage.setItem("jwtToken", data)
-      navigate("/")
-    }
+        const data = await response.text()
+        console.log("Login successful:", data)
+        // Spara token
+        localStorage.setItem("jwtToken", data)
+        navigate("/")
+      }
     } catch (error) {
       console.error("Error occurred during login:", error)
     }
   }
-  
+
   return (
     <div
       className="h-screen flex items-center justify-center bg-gray-100"
@@ -109,7 +105,7 @@ const LoginUser = () => {
             className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition"
           >
             Login
-            </button>
+          </button>
         </form>
       </div>
     </div>

@@ -7,8 +7,8 @@ interface WandModel {
 }
 
 export interface CharacterModel {
-  _id: string 
-  apiId: string 
+  _id: string
+  apiId: string
   name: string
   species: string
   gender: string

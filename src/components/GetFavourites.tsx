@@ -1,27 +1,29 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { CharacterModel } from "../interfaces/CharacterModel";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { CharacterModel } from "../interfaces/CharacterModel"
+import { Link } from "react-router-dom"
 
 const GetFavourites = () => {
-  const [favouriteCharacters, setFavouriteCharacters] = useState<CharacterModel[]>([]);
+  const [favouriteCharacters, setFavouriteCharacters] = useState<
+    CharacterModel[]
+  >([])
   const defaultImage =
-    "https://images.desenio.com/zoom/wb0012-8harrypotter-hogwartscrest50x70-60944-71911.jpg";
+    "https://images.desenio.com/zoom/wb0012-8harrypotter-hogwartscrest50x70-60944-71911.jpg"
 
   useEffect(() => {
     const fetchFavoritesAndCharacters = async () => {
       try {
-        const token = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem("jwtToken")
 
         const allCharactersResponse = await axios.get(
           "http://localhost:8080/getAllCharactersFromDatabase",
           {
             headers: {
-              Authorization: `Bearer ${token}`, 
+              Authorization: `Bearer ${token}`,
             },
           }
-        );
-        const allCharacters: CharacterModel[] = allCharactersResponse.data;
+        )
+        const allCharacters: CharacterModel[] = allCharactersResponse.data
 
         const favouriteIdsResponse = await axios.get(
           "http://localhost:8080/getFavouriteCharacters",
@@ -30,21 +32,21 @@ const GetFavourites = () => {
               Authorization: `Bearer ${token}`,
             },
           }
-        );
-        const favouriteIds: string[] = favouriteIdsResponse.data; 
+        )
+        const favouriteIds: string[] = favouriteIdsResponse.data
 
-        const filteredFavorites = allCharacters.filter(character =>
+        const filteredFavorites = allCharacters.filter((character) =>
           favouriteIds.includes(character.apiId)
-        );
+        )
 
-        setFavouriteCharacters(filteredFavorites);
+        setFavouriteCharacters(filteredFavorites)
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error)
       }
-    };
+    }
 
-    fetchFavoritesAndCharacters();
-  }, []);
+    fetchFavoritesAndCharacters()
+  }, [])
 
   return (
     <div>
@@ -79,9 +81,7 @@ const GetFavourites = () => {
         </div>
       </div>
     </div>
-  );
-  
-};
+  )
+}
 
-
-export default GetFavourites;
+export default GetFavourites

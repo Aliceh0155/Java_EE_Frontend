@@ -8,7 +8,6 @@ const Navbar = () => {
   const handleLogout = () => {
     // Ta bort token från localStorage och logga ut användaren
     localStorage.removeItem("jwtToken")
-    // Om dirigerar användaren till login-sidan efter logout
     navigate("/login")
   }
 
